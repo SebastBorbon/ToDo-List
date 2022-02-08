@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
 const authRoutes = require("./routers/auth").router;
+const tasksRoutes = require("./routers/tasks").router;
 const dotenv = require("dotenv");
 dotenv.config();
 require("./database.js");
@@ -13,6 +14,7 @@ app.get("/", function (req, res) {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/tasks", tasksRoutes);
 
 app.listen(port, () => {
   console.log("server started at port 3000");
