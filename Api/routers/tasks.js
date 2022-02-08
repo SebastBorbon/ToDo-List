@@ -47,7 +47,7 @@ router.put("/:id", async (req, res) => {
     );
     res.json(updatedTask);
   } catch (err) {
-    res.status(500).json({ message: "failed on the authorization" });
+    res.status(500).json("failed on the authorization");
   }
 });
 exports.router = router;

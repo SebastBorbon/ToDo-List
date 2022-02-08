@@ -16,6 +16,10 @@ const TaskSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  accepted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Task = mongoose.model("Task", TaskSchema, "task");

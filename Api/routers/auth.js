@@ -4,10 +4,6 @@ const User = require("../models/user");
 const CryptoJS = require("crypto-js");
 const router = express.Router();
 
-router.get("/signup", function (req, res) {
-  res.send("Hello signup ");
-});
-
 router.post("/signup", async (req, res) => {
   const newUser = new User({
     name: req.body.name,
