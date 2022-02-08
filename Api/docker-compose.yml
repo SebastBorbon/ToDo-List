@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  todo:
+    build: .
+    environment:
+      MONGO_URL: "mongodb://admin:admin@mongodb:27017/toDoDB"
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src
+      - /usr/src/node_modules
+    command: npx nodemon server.js -L
+  db:
+    container_name: mongodb
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: toDoDB
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
