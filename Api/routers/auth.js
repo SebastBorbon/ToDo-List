@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
     res.json({ ...others, token });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "failed the login" });
+    res.status(500).json("failed the login");
   }
 });
 
