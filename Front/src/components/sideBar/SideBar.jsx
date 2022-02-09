@@ -6,7 +6,6 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 
 const Container = styled.div`
   background-color: #474747;
-  flex: 1;
   height: 100vh;
   width: 15%;
   position: sticky;

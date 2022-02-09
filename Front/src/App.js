@@ -2,7 +2,7 @@ import "./App.css";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
-import SideBar from "./components/sideBar/SideBar";
+
 function App() {
   const user = true;
   return (
