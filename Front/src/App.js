@@ -1,13 +1,22 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
-import Home from "./pages/home";
-
+import { Route, Routes, Navigate } from "react-router-dom";
+import Home from "./pages/home/Home";
+import Login from "./pages/login/Login";
+import SideBar from "./components/sideBar/SideBar";
 function App() {
+  const user = true;
   return (
     <>
       <Routes>
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/home" element={<Home />} />
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/home" /> : <Login />}
+        />
+        <Route
+          exact
+          path="/home"
+          element={user ? <Home /> : <Navigate to="/login" />}
+        />
       </Routes>
     </>
   );
