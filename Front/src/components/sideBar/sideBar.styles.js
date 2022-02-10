@@ -3,39 +3,39 @@ export const Container = styled.div`
   background-color: #474747;
   height: 100vh;
   width: 15%;
-  position: sticky;
-  top: 50px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  padding: 5px;
+  @media (max-width: 425px) {
+    display: none;
+  }
 `;
 
 export const ImgContainer = styled.div`
   padding: 20px 20px;
   background-color: #ff5000;
-  width: 180px;
-  height: 130px;
-  margin: 30px;
+  width: 70%;
+  height: 15%;
+  margin: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 50px;
 `;
 export const Image = styled.img`
-  height: 45px;
+  height: 35%;
 `;
 export const Wrapper = styled.div`
-  width: 180px;
-  height: 250px;
-  padding: 10px 20px;
-  margin: 30px;
+  width: 85%;
+  height: 30%;
+  margin-left: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
 `;
 export const MenuItem = styled.button`
-  width: 220px;
+  width: 100%;
   padding: 5px 30px;
   display: flex;
   align-items: center;

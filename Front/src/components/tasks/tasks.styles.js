@@ -4,7 +4,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   margin-left: 10px;
-  margin-top: 40px;
+  margin-top: 100px;
   height: 80%;
 `;
 export const ShowTasks = styled.div`
@@ -98,7 +98,6 @@ export const CreateTitle = styled.div`
 `;
 export const Label = styled.div`
   margin: 0px 20px;
-
   margin-top: 20px;
 `;
 export const InputTitle = styled.input`
@@ -142,4 +141,9 @@ export const Button = styled.button`
   color: #ff5000;
   width: 220px;
   font-family: Montserrat;
+  &:hover {
+    transition: all 0.3s ease-in-out;
+    background-color: #ff5000;
+    color: white;
+  }
 `;
