@@ -4,7 +4,7 @@ const Task = require("../models/task");
 
 router.get("/", async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find({ userId: req.query.userId });
     res.json(tasks);
   } catch (err) {
     res.status(500).json(err);
@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const newTask = new Task({
+    userId: req.body.userId,
     title: req.body.title,
     description: req.body.description,
     status: req.body.status,
