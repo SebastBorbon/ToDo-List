@@ -11,19 +11,33 @@ import {
   U,
   InputLogin,
 } from "./login.styles";
-import { useDispatch } from "react-redux";
-import { login, signUp } from "../../redux/actions/apiCalls";
+import { useDispatch, useSelector } from "react-redux";
+import { login, signUp, errorCleanedLogin } from "../../redux/actions/apiCalls";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { injectStyle } from "react-toastify/dist/inject-style";
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 const Login = () => {
   const [register, setRegister] = useState(false);
   const [inputs, setInputs] = useState({});
   const dispatch = useDispatch();
+  const backendError = useSelector((state) => state.error.message);
 
   const handleChange = (e) => {
     setInputs((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
+
+  useEffect(() => {
+    if (backendError?.length) {
+      toast.dark(backendError);
+      errorCleanedLogin(dispatch);
+    }
+  }, [backendError, dispatch]);
   const handleLogin = (e) => {
     e.preventDefault(e);
     login(dispatch, inputs);
@@ -33,12 +47,17 @@ const Login = () => {
 
     signUp(dispatch, inputs);
   };
+  const handleRegister = (e) => {
+    e.preventDefault(e);
+    setInputs({});
+    setRegister(false);
+  };
   return (
     <Container>
       {register ? (
         <Wrapper>
           <TitleWrapper>
-            <Title onClick={() => setRegister(false)}>Iniciar Sesión</Title>
+            <Title onClick={(e) => handleRegister(e)}>Iniciar Sesión</Title>
             <Title>
               <U>Registrarse</U>
             </Title>
@@ -84,6 +103,7 @@ const Login = () => {
           </Form>
         </Wrapper>
       )}
+      <ToastContainer />
     </Container>
   );
 };

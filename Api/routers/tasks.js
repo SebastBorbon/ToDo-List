@@ -11,6 +11,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/all", async (req, res) => {
+  try {
+    const allTasks = await Task.find();
+    res.json(allTasks);
+    console.log("enviamos todas las tareas");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const newTask = new Task({
@@ -19,7 +29,6 @@ router.post("/", async (req, res) => {
       description: req.body.description,
       endDate: req.body.date,
     });
-    console.log("HEY");
     await newTask.save();
     res.json(newTask);
   } catch (err) {

@@ -10,6 +10,8 @@ import {
   getAllUsersReq,
   getTaskReq,
   postTask,
+  deletTaskReq,
+  getAllTasksReq,
 } from "../../redux/actions/apiCalls";
 import {
   Container,
@@ -35,6 +37,7 @@ const Tasks = () => {
   const [value, setValue] = useState(new Date());
   const [newTask, setnewTask] = useState(true);
   const [allUsers, setAllUsers] = useState([]);
+  const [allTasks, setAllTasks] = useState([]);
   const [formErrors, setFormErrors] = useState({
     error: "",
   });
@@ -54,7 +57,7 @@ const Tasks = () => {
     e.preventDefault();
     if (data.user) {
       postTask(data, (response) => {
-        console.log(response);
+        setAllTasks([...allTasks, response]);
       });
       setFormErrors({ error: "" });
       setTaskData({
@@ -74,20 +77,29 @@ const Tasks = () => {
       getAllUsersReq(dispatch, (response) => {
         setAllUsers(response);
       });
+      getAllTasksReq(dispatch, (response) => {
+        setAllTasks(response);
+      });
     } else {
+      getTaskReq(dispatch, user._id, (response) => {
+        setAllTasks(response);
+      });
+
       setAllUsers([user]);
     }
   }, []);
-  useEffect(() => {}, [value]);
 
+  const handleDelete = (id) => {
+    deletTaskReq(dispatch, id);
+  };
   const renderContent = () => {
     if (isMobile) {
       return (
         <Container>
           {newTask ? (
             <ShowTasks>
-              {arrayTasks.map((item) => (
-                <Wrapper key={item.id}>
+              {allTasks.map((item) => (
+                <Wrapper key={item._id}>
                   <TaskTitle>
                     Titulo:
                     <TaskText>{item.title}</TaskText>
@@ -105,34 +117,9 @@ const Tasks = () => {
                     <TaskText>Sebas</TaskText>
                   </TaskTitle>
                   <ContainerCheckbox>
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue={item.status}
-                        name="radio-buttons-group"
-                        style={{
-                          color: "#ff5000",
-                          flexDirection: "row",
-                        }}
-                        onChange={handleChange}
-                      >
-                        <FormControlLabel
-                          value="iniciar"
-                          control={<Radio style={{ color: "#ff5000" }} />}
-                          label="Iniciar"
-                        />
-                        <FormControlLabel
-                          value="en proceso"
-                          control={<Radio style={{ color: "#ff5000" }} />}
-                          label="En proceso"
-                        />
-                        <FormControlLabel
-                          value="finalizada"
-                          control={<Radio style={{ color: "#ff5000" }} />}
-                          label="finalizada"
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                    <Button onClick={() => handleDelete(item._id)}>
+                      borrar
+                    </Button>
                   </ContainerCheckbox>
                 </Wrapper>
               ))}

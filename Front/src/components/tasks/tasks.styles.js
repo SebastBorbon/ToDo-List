@@ -90,7 +90,7 @@ export const ContainerCheckbox = styled.div`
   display: flex;
   width: 130px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 1px;
   @media (max-width: 425px) {
     width: 100%;

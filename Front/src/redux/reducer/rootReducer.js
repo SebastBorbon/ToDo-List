@@ -7,7 +7,7 @@ const userSlice = createSlice({
     tasks: [],
     allUsers: [],
     isFetching: false,
-    error: false,
+    error: [],
   },
   reducers: {
     loginStart: (state) => {
@@ -19,7 +19,6 @@ const userSlice = createSlice({
     },
     loginFailure: (state) => {
       state.isFetching = false;
-      state.error = true;
     },
     logOut: (state) => {
       state.currentUser = null;
@@ -27,10 +26,24 @@ const userSlice = createSlice({
     },
     getTask: (state, action) => {
       state.tasks = action.payload;
-      state.error = false;
     },
     getAllUsers: (state, action) => {
       state.allUsers = action.payload;
+    },
+    getAllTasks: (state, action) => {
+      state.tasks = action.payload;
+    },
+    deleteTask: (state, action) => {
+      state.tasks.splice(
+        state.tasks.findIndex((item) => item._id === action.payload),
+        1
+      );
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+    cleanError: (state) => {
+      state.error = [];
     },
   },
 });
@@ -42,5 +55,9 @@ export const {
   logOut,
   getTask,
   getAllUsers,
+  getAllTasks,
+  deleteTask,
+  setError,
+  cleanError,
 } = userSlice.actions;
 export default userSlice.reducer;
