@@ -12,17 +12,16 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const newTask = new Task({
-    userId: req.body.userId,
-    title: req.body.title,
-    description: req.body.description,
-    status: req.body.status,
-    endDate: req.body.endDate,
-  });
-
   try {
-    const savedTask = await newTask.save();
-    res.json(savedTask);
+    const newTask = new Task({
+      userId: req.body.user,
+      title: req.body.title,
+      description: req.body.description,
+      endDate: req.body.date,
+    });
+    console.log("HEY");
+    await newTask.save();
+    res.json(newTask);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
