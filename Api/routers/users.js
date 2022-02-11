@@ -11,4 +11,13 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/all", async (req, res) => {
+  try {
+    const allUsers = await User.find();
+    res.json(allUsers);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 exports.router = router;
