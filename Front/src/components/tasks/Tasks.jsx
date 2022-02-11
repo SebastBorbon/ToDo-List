@@ -12,6 +12,7 @@ import {
   postTask,
   deletTaskReq,
   getAllTasksReq,
+  editTask,
 } from "../../redux/actions/apiCalls";
 import {
   Container,
@@ -30,6 +31,7 @@ import {
   Option,
   Button,
   ButtonMobile,
+  BtnBorrar,
 } from "./tasks.styles";
 import { ToastContainer, toast } from "react-toastify";
 import { injectStyle } from "react-toastify/dist/inject-style";
@@ -103,6 +105,14 @@ const Tasks = () => {
     });
     toast.dark("Tarea borrada!");
   };
+  const handleAccepted = (id) => {
+    editTask(id, (response) => {
+      copyTask = allTasks;
+      const index = allTasks.findIndex((el) => el._id == response);
+      copyTask[index] = { ...copyTask[index], accepted: true };
+      setAllTasks(copyTask);
+    });
+  };
   const renderContent = () => {
     if (isMobile) {
       return (
@@ -113,24 +123,27 @@ const Tasks = () => {
                 <Wrapper key={item._id}>
                   <TaskTitle>
                     Titulo:
-                    <TaskText>{item.title}</TaskText>
+                    <TaskText>{item.title.slice(0, 10)}</TaskText>
                   </TaskTitle>
                   <TaskTitle>
                     Descripcion:
-                    <TaskText>{item.description.slice(0, 50)}</TaskText>
+                    <TaskText>{item.description.slice(0, 30)}</TaskText>
                   </TaskTitle>
                   <TaskTitle>
                     Fecha:
-                    <TaskText>{item.endDate}</TaskText>
+                    <TaskText>{item.endDate.slice(0, 40)}</TaskText>
                   </TaskTitle>
                   <TaskTitle>
                     Usuario:
-                    <TaskText>Sebas</TaskText>
+                    <TaskText>{item.userId?.name}</TaskText>
                   </TaskTitle>
                   <ContainerCheckbox>
-                    <Button onClick={() => handleDelete(item._id)}>
+                    <BtnBorrar onClick={() => handleAccepted(item._id)}>
+                      aceptar
+                    </BtnBorrar>
+                    <BtnBorrar onClick={() => handleDelete(item._id)}>
                       borrar
-                    </Button>
+                    </BtnBorrar>
                   </ContainerCheckbox>
                 </Wrapper>
               ))}
@@ -153,7 +166,7 @@ const Tasks = () => {
                     }}
                     name="title"
                     minLength={4}
-                    maxLength={30}
+                    maxLength={10}
                     size={30}
                   ></InputTitle>
                   <Label>Descripcion:</Label>
@@ -165,7 +178,7 @@ const Tasks = () => {
                       setTaskData({ ...taskData, description: e.target.value });
                     }}
                     minLength={4}
-                    maxLength={100}
+                    maxLength={30}
                     size={20}
                   ></Input>
                   <Label>Fecha a finalizar:</Label>
@@ -220,22 +233,30 @@ const Tasks = () => {
             <Wrapper key={item._id}>
               <TaskTitle>
                 Titulo:
-                <TaskText>{item.title}</TaskText>
+                <TaskText>{item.title.slice(0, 10)}</TaskText>
               </TaskTitle>
               <TaskTitle>
                 Descripcion:
-                <TaskText>{item.description.slice(0, 50)}</TaskText>
+                <TaskText>{item.description.slice(0, 20)}</TaskText>
               </TaskTitle>
               <TaskTitle>
                 Fecha:
-                <TaskText>{item.endDate}</TaskText>
+                <TaskText>{item.endDate.slice(0, 20)}</TaskText>
               </TaskTitle>
               <TaskTitle>
                 Usuario:
-                <TaskText>Sebas</TaskText>
+                <TaskText>
+                  {item.userId?.name}
+                  {item.userId?.lastName}
+                </TaskText>
               </TaskTitle>
               <ContainerCheckbox>
-                <Button onClick={() => handleDelete(item._id)}>borrar</Button>
+                <BtnBorrar onClick={() => handleAccepted(item._id)}>
+                  aceptar
+                </BtnBorrar>
+                <BtnBorrar onClick={() => handleDelete(item._id)}>
+                  borrar
+                </BtnBorrar>
               </ContainerCheckbox>
             </Wrapper>
           ))}
@@ -258,8 +279,8 @@ const Tasks = () => {
                 }}
                 name="title"
                 minLength={4}
-                maxLength={30}
-                size={30}
+                maxLength={10}
+                size={10}
               ></InputTitle>
               <Label>Descripcion:</Label>
               <Input

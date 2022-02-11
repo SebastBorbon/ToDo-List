@@ -17,5 +17,5 @@ router.post("/", createTasks);
 
 router.delete("/:id", deleteTasks);
 
-router.put("/:id", updateTasks);
+router.put("/", updateTasks);
 exports.router = router;

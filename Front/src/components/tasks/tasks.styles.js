@@ -2,24 +2,26 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin-left: 10px;
+  justify-content: flex-start;
   margin-top: 100px;
-  height: 80%;
-  width: 99d%;
-  background-color: white;
+  height: 70%;
+  width: 90%;
   @media (max-width: 425px) {
     margin: 0px 0px;
     justify-content: flex-start;
     flex-direction: column;
+    background-color: #blue;
+    height: 80%;
+    width: 100%;
   }
 `;
 export const ShowTasks = styled.div`
+  margin-left: 10px;
   width: 80%;
   height: 60vh;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -55,16 +57,16 @@ export const Wrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   @media (max-width: 425px) {
-    height: 100%;
+    height: 80%;
     margin-bottom: 10px;
     padding: 10px;
     flex-wrap: wrap;
   }
 `;
 export const TaskTitle = styled.div`
-  margin: 15px 30px;
+  margin: 15px 20px;
   padding: 10px 10px;
-  width: 150px;
+  width: 200px;
   font-size: 17px;
   font-weight: 600;
   color: black;
@@ -73,28 +75,34 @@ export const TaskTitle = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   @media (max-width: 425px) {
-    font-size: 15px;
+    font-size: 13px;
     margin: 5px 0px;
   }
 `;
 export const TaskText = styled.div`
   display: inline-block
   overflow-wrap: break-word
-  max-width: 100%;
   overflow: hidden;
   font-size: 16px;
   margin-top: 10px;
   font-weight: 500;
+  @media (max-width: 425px) {
+    font-size: 13px;
+    margin: 5px 0px;
+  }
 `;
 export const ContainerCheckbox = styled.div`
   display: flex;
-  width: 130px;
+  width: 15%;
   flex-direction: column;
   justify-content: space-around;
   padding: 1px;
   @media (max-width: 425px) {
+    flex-direction: row;
     width: 100%;
-    height: 25%;
+    height: 10%;
+
+    margin-bottom: 2px;
   }
 `;
 export const CreateTasks = styled.div`
@@ -117,6 +125,7 @@ export const CreateContainer = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   @media (max-width: 425px) {
+    height: 61vh;
   }
 `;
 export const CreateTitle = styled.div`
@@ -180,6 +189,16 @@ export const Button = styled.button`
     background-color: #ff5000;
     color: white;
   }
+  @media (max-width: 425px) {
+    margin: 0px 20px;
+    padding: 5px 5p
+    height: 10px;
+    display: flex;
+    transition: all 0.3s ease-in-out;
+    align-items: center;
+    justify-content: center;
+    margin-bottom:6px;
+  }
 `;
 export const ButtonMobile = styled.button`
   padding: 10px 10px;
@@ -208,4 +227,26 @@ export const ButtonMobile = styled.button`
     justify-content: center;
     background-color: #ff7000;
   }
+`;
+export const BtnBorrar = styled.div`
+  width: 60%;
+  padding: 6px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 12px;
+  background-color: #ff5000;
+  border-radius: 10px;
+  color: white;
+  &:hover {
+    transition: all 0.3s ease-in-out;
+    background-color: #ff7000;
+    color: white;
+  }
+  @media (max-width: 425px) {
+    width: 20%;
+    display: flex;
+    transition: all 0.3s ease-in-out;
+    align-items: center;
+    justify-content: center;
+    background-color: #ff7000;
 `;

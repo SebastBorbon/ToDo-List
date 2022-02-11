@@ -81,6 +81,14 @@ export const postTask = async (payload, cb) => {
     console.log(e);
   }
 };
+export const editTask = async (payload, cb) => {
+  try {
+    const res = await axios.put(`${baseUrl}tasks?id=${payload}`);
+    cb(res.data);
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 export const deletTaskReq = async (dispatch, payload, cb) => {
   try {

@@ -2,7 +2,9 @@ const Task = require("../models/task");
 
 const getTaskFromUser = async (req, res) => {
   try {
-    const tasks = await Task.find({ userId: req.query.userId });
+    const tasks = await Task.find({ userId: req.query.userId }).populate(
+      "userId"
+    );
     res.json(tasks);
   } catch (err) {
     res.status(500).json(err);
@@ -11,7 +13,7 @@ const getTaskFromUser = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
   try {
-    const allTasks = await Task.find();
+    const allTasks = await Task.find().populate("userId");
     res.json(allTasks);
   } catch (err) {
     res.status(500).json(err);
@@ -46,9 +48,9 @@ const deleteTasks = async (req, res) => {
 const updateTasks = async (req, res) => {
   try {
     const updatedTask = await Task.findByIdAndUpdate(
-      req.params.id,
+      req.query.id,
       {
-        $set: req.body,
+        accepted: true,
       },
       { new: true }
     );
