@@ -14,7 +14,7 @@ const getAllUsers = async (req, res) => {
     const allUsers = await User.find();
     res.json(allUsers);
   } catch (e) {
-    console.log(e);
+    res.status(500).json(err);
   }
 };
 
