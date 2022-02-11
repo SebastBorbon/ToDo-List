@@ -27,6 +27,7 @@ import {
 const Tasks = () => {
   const [value, setValue] = useState(new Date());
   const [newTask, setnewTask] = useState(true);
+
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -45,11 +46,11 @@ const Tasks = () => {
                     <TaskText>{item.title}</TaskText>
                   </TaskTitle>
                   <TaskTitle>
-                    Description:
+                    Descripcion:
                     <TaskText>{item.description.slice(0, 50)}</TaskText>
                   </TaskTitle>
                   <TaskTitle>
-                    Date:
+                    Fecha:
                     <TaskText>{item.endDate}</TaskText>
                   </TaskTitle>
                   <TaskTitle>
@@ -102,7 +103,7 @@ const Tasks = () => {
                   maxLength={30}
                   size={30}
                 ></InputTitle>
-                <Label>Description:</Label>
+                <Label>Descripcion:</Label>
                 <Input
                   type="text"
                   minLength={4}
@@ -148,11 +149,11 @@ const Tasks = () => {
                 <TaskText>{item.title}</TaskText>
               </TaskTitle>
               <TaskTitle>
-                Description:
+                Descripcion:
                 <TaskText>{item.description.slice(0, 50)}</TaskText>
               </TaskTitle>
               <TaskTitle>
-                Date:
+                Fecha:
                 <TaskText>{item.endDate}</TaskText>
               </TaskTitle>
               <TaskTitle>

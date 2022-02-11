@@ -6,8 +6,11 @@ const authRoutes = require("./routers/auth").router;
 const tasksRoutes = require("./routers/tasks").router;
 const usersRoutes = require("./routers/users").router;
 const dotenv = require("dotenv");
+const cors = require("cors");
 dotenv.config();
 require("./database.js");
+
+app.use(cors());
 app.use(express.json());
 
 app.get("/", function (req, res) {

@@ -11,10 +11,28 @@ import {
   U,
   InputLogin,
 } from "./login.styles";
-
+import { useDispatch } from "react-redux";
+import { login, signUp } from "../../redux/actions/apiCalls";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [register, setRegister] = useState(false);
+  const [inputs, setInputs] = useState({});
+  const dispatch = useDispatch();
 
+  const handleChange = (e) => {
+    setInputs((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+  const handleLogin = (e) => {
+    e.preventDefault(e);
+    login(dispatch, inputs);
+  };
+  const handlesignUp = (e) => {
+    e.preventDefault(e);
+
+    signUp(dispatch, inputs);
+  };
   return (
     <Container>
       {register ? (
@@ -26,12 +44,20 @@ const Login = () => {
             </Title>
           </TitleWrapper>
           <Form>
-            <Input placeholder="Nombre" />
-            <Input placeholder="Apellido" />
-            <Input placeholder="Email" />
-            <Input placeholder="Celular" />
-            <Input placeholder="Contraseña" />
-            <Button>Registrarse</Button>
+            <Input placeholder="Nombre" name="name" onChange={handleChange} />
+            <Input
+              placeholder="Apellido"
+              name="lastName"
+              onChange={handleChange}
+            />
+            <Input placeholder="Email" name="email" onChange={handleChange} />
+            <Input placeholder="Celular" name="phone" onChange={handleChange} />
+            <Input
+              placeholder="Contraseña"
+              name="password"
+              onChange={handleChange}
+            />
+            <Button onClick={handlesignUp}>Registrarse</Button>
           </Form>
         </Wrapper>
       ) : (
@@ -43,9 +69,17 @@ const Login = () => {
             <Title onClick={() => setRegister(true)}>Registrarse</Title>
           </TitleWrapper>
           <Form>
-            <InputLogin placeholder="Email" />
-            <InputLogin placeholder="Contraseña" />
-            <Button>Iniciar Sesión</Button>
+            <InputLogin
+              placeholder="Email"
+              name="email"
+              onChange={handleChange}
+            />
+            <InputLogin
+              placeholder="Contraseña"
+              name="password"
+              onChange={handleChange}
+            />
+            <Button onClick={handleLogin}>Iniciar Sesión</Button>
             <Link>¿Olvidaste tu contraseña?</Link>
           </Form>
         </Wrapper>

@@ -4,18 +4,18 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 
 function App() {
-  const user = false;
+  const token = window.localStorage.getItem("token");
   return (
     <>
       <Routes>
         <Route
           path="/login"
-          element={user ? <Navigate to="/home" /> : <Login />}
+          element={token ? <Navigate to="/home" /> : <Login />}
         />
         <Route
           exact
           path="/home"
-          element={user ? <Home /> : <Navigate to="/login" />}
+          element={token ? <Home /> : <Navigate to="/login" />}
         />
       </Routes>
     </>
