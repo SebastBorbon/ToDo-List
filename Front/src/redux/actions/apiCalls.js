@@ -8,6 +8,7 @@ import {
   deleteTask,
   setError,
   cleanError,
+  loginFailure,
 } from "../reducer/rootReducer";
 
 const baseUrl = "http://localhost:3000/api/";
@@ -18,17 +19,18 @@ export const login = async (dispatch, user) => {
     const res = await axios.post(`${baseUrl}auth/login`, user);
     window.localStorage.setItem("token", res.data.token);
     dispatch(loginSuccess(res.data));
+    window.location.reload();
   } catch (err) {
+    dispatch(loginFailure());
     dispatch(setError(err.response.data));
     dispatch(cleanError);
   }
 };
 export const signUp = async (dispatch, user) => {
-  console.log(user);
   try {
     const res = await axios.post(`${baseUrl}auth/signup`, user);
     console.log(res.data);
-    if (res.data === "user created!") {
+    if (res.data.message === "user created") {
       login(dispatch, {
         email: user.email,
         password: user.password,
@@ -80,10 +82,11 @@ export const postTask = async (payload, cb) => {
   }
 };
 
-export const deletTaskReq = async (dispatch, payload) => {
+export const deletTaskReq = async (dispatch, payload, cb) => {
   try {
     await axios.delete(`${baseUrl}tasks/${payload}`);
     dispatch(deleteTask(payload));
+    cb();
   } catch (e) {
     console.log(e);
   }

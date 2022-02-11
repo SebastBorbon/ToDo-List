@@ -1,23 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const { get10Users, getAllUsers } = require("../controllers/users");
 
-router.get("/", async (req, res) => {
-  try {
-    const users = await User.find().sort({ _id: -1 }).limit(10);
-    res.json(users);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+router.get("/", get10Users);
 
-router.get("/all", async (req, res) => {
-  try {
-    const allUsers = await User.find();
-    res.json(allUsers);
-  } catch (e) {
-    console.log(e);
-  }
-});
+router.get("/all", getAllUsers);
 
 exports.router = router;

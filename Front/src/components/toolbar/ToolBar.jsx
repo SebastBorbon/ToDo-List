@@ -9,8 +9,10 @@ import {
 } from "./toolBar.styles";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import logo from "../../images/logoTorrens.png";
+import { useSelector } from "react-redux";
 
 const ToolBar = () => {
+  const taskNumber = useSelector((state) => state.tasks.length);
   return (
     <Container>
       <Wrapper>
@@ -19,7 +21,7 @@ const ToolBar = () => {
         </ImageContainer>
         <TextContainer>
           <NotificationsIcon />
-          <Tasks>Tareas(2)</Tasks>
+          <Tasks>Tareas({taskNumber})</Tasks>
           <Text>Sebastian</Text>
         </TextContainer>
       </Wrapper>

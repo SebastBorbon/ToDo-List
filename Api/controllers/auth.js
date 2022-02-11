@@ -1,25 +1,10 @@
-const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const CryptoJS = require("crypto-js");
-const Joi = require("joi");
-
-const validationRegister = Joi.object({
-  name: Joi.string().required(),
-  lastName: Joi.string().required(),
-  email: Joi.string().required().email(),
-  phone: Joi.string().required(),
-  password: Joi.string()
-    .min(7)
-    .max(1024)
-    .required()
-    .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{7,1024}$/);
-});
-
-const validationLogin = Joi.object({
-  email: Joi.string().required().email(),
-  password: Joi.string().required(),
-});
+const {
+  validationLogin,
+  validationRegister,
+} = require("../middlewares/validationAuth");
 
 const signUp = async (req, res) => {
   const { error } = validationRegister.validate(req.body);
@@ -65,7 +50,7 @@ const login = async (req, res) => {
       process.env.JWT_KEY
     );
     const { password, ...others } = user._doc;
-    res.json({ ...others, token });
+    res.status(201).json({ ...others, token });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Wrong credentials" });

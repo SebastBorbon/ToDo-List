@@ -31,6 +31,12 @@ import {
   Button,
   ButtonMobile,
 } from "./tasks.styles";
+import { ToastContainer, toast } from "react-toastify";
+import { injectStyle } from "react-toastify/dist/inject-style";
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 const Tasks = () => {
   const user = useSelector((state) => state.currentUser);
@@ -59,6 +65,8 @@ const Tasks = () => {
       postTask(data, (response) => {
         setAllTasks([...allTasks, response]);
       });
+      toast.dark("Tarea creada!");
+
       setFormErrors({ error: "" });
       setTaskData({
         title: "",
@@ -90,7 +98,10 @@ const Tasks = () => {
   }, []);
 
   const handleDelete = (id) => {
-    deletTaskReq(dispatch, id);
+    deletTaskReq(dispatch, id, () => {
+      setAllTasks(allTasks.filter((elem) => elem._id !== id));
+    });
+    toast.dark("Tarea borrada!");
   };
   const renderContent = () => {
     if (isMobile) {
@@ -195,14 +206,18 @@ const Tasks = () => {
           <ButtonMobile onClick={() => setnewTask(true)}>
             Ver Tareas
           </ButtonMobile>
+          <ToastContainer
+            closeOnClick
+            progressStyle={{ backgroundColor: "#ff7000" }}
+          />
         </Container>
       );
     }
     return (
       <Container>
         <ShowTasks>
-          {arrayTasks.map((item) => (
-            <Wrapper key={item.id}>
+          {allTasks.map((item) => (
+            <Wrapper key={item._id}>
               <TaskTitle>
                 Titulo:
                 <TaskText>{item.title}</TaskText>
@@ -220,69 +235,79 @@ const Tasks = () => {
                 <TaskText>Sebas</TaskText>
               </TaskTitle>
               <ContainerCheckbox>
-                <FormControl>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue={item.status}
-                    name="radio-buttons-group"
-                    style={{
-                      color: "#ff5000",
-                      flexDirection: "row",
-                    }}
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      value="iniciar"
-                      control={<Radio style={{ color: "#ff5000" }} />}
-                      label="Iniciar"
-                    />
-                    <FormControlLabel
-                      value="en proceso"
-                      control={<Radio style={{ color: "#ff5000" }} />}
-                      label="En proceso"
-                    />
-                    <FormControlLabel
-                      value="finalizada"
-                      control={<Radio style={{ color: "#ff5000" }} />}
-                      label="finalizada"
-                    />
-                  </RadioGroup>
-                </FormControl>
+                <Button onClick={() => handleDelete(item._id)}>borrar</Button>
               </ContainerCheckbox>
             </Wrapper>
           ))}
         </ShowTasks>
+
         <CreateTasks>
-          <CreateContainer>
-            <CreateTitle>
-              <TaskText>Agregar Nueva Tarea</TaskText>
-            </CreateTitle>
-            <Label>Title:</Label>
-            <InputTitle
-              type="text"
-              minLength={4}
-              maxLength={30}
-              size={30}
-            ></InputTitle>
-            <Label>Description:</Label>
-            <Input type="text" minLength={4} maxLength={100} size={20}></Input>
-            <Label>Fecha a finalizar:</Label>
-            <InputTitle
-              type="date"
-              value={value}
-              onChange={(e) => handleChange(e)}
-            ></InputTitle>
-            <Label>Usuario:</Label>
-            <Select>
-              {arrayUsers.map((item) => (
-                <Option key={item.id}>
-                  {item.name} {item.lastName}
+          <form onSubmit={(e) => createTask(e, taskData)}>
+            <CreateContainer>
+              <CreateTitle>
+                <TaskText>Agregar Nueva Tarea</TaskText>
+              </CreateTitle>
+              <Label>Title:</Label>
+              <InputTitle
+                type="text"
+                required={true}
+                value={taskData.title}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setTaskData({ ...taskData, title: e.target.value });
+                }}
+                name="title"
+                minLength={4}
+                maxLength={30}
+                size={30}
+              ></InputTitle>
+              <Label>Descripcion:</Label>
+              <Input
+                type="text"
+                value={taskData.description}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setTaskData({ ...taskData, description: e.target.value });
+                }}
+                minLength={4}
+                maxLength={100}
+                size={20}
+              ></Input>
+              <Label>Fecha a finalizar:</Label>
+              <InputTitle
+                type="date"
+                required={true}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setTaskData({ ...taskData, date: e.target.value });
+                }}
+              ></InputTitle>
+              <Label>Usuario:</Label>
+              <Select
+                required={true}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setTaskData({ ...taskData, user: e.target.value });
+                }}
+              >
+                <Option disabled selected value>
+                  --select an option--
                 </Option>
-              ))}
-            </Select>
-            <Button onClick={() => setnewTask(true)}>Crear nueva Tarea</Button>
-          </CreateContainer>
+                {allUsers.map((item) => (
+                  <Option key={item._id} value={item._id}>
+                    {item.name} {item.lastName}
+                  </Option>
+                ))}
+              </Select>
+              <Label>{formErrors.error}</Label>
+              <Button type="submit">Crear nueva Tarea</Button>
+            </CreateContainer>
+          </form>
         </CreateTasks>
+        <ToastContainer
+          closeOnClick
+          progressStyle={{ backgroundColor: "#ff7000" }}
+        />
       </Container>
     );
   };

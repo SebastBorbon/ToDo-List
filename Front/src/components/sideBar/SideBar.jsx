@@ -11,21 +11,21 @@ import {
   Image,
 } from "./sideBar.styles";
 
-const SideBar = () => {
+const SideBar = ({ setRender }) => {
   return (
     <Container>
       <ImgContainer>
         <Image src={logo}></Image>
       </ImgContainer>
       <Wrapper>
-        <MenuItem>
+        <MenuItem onClick={() => setRender("Home")}>
           <HomeIcon style={{ color: "white" }} /> <Text>Inicio</Text>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => setRender("Users")}>
           <PeopleAltIcon style={{ color: "white" }} /> <Text>Usuarios</Text>
         </MenuItem>
-        <MenuItem>
-          <FormatListBulletedIcon style={{ color: "white" }} />{" "}
+        <MenuItem onClick={() => setRender("Tasks")}>
+          <FormatListBulletedIcon style={{ color: "white" }} />
           <Text>Tareas</Text>
         </MenuItem>
       </Wrapper>

@@ -10,9 +10,26 @@ import {
   Tbody,
   UserContainer,
 } from "./users.styles";
-import { arrayUsers } from "../../dummydata";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllUsersReq, getTaskReq } from "../../redux/actions/apiCalls";
 
 const Users = () => {
+  const user = useSelector((state) => state.currentUser);
+  const [users, setUsers] = useState([]);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (user.isAdmin === false) {
+      getAllUsersReq(dispatch, (response) => {
+        const sortUsers = response.slice().sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        setUsers(sortUsers);
+      });
+    }
+  }, []);
+
   return (
     <UserContainer>
       <Container>
@@ -28,16 +45,14 @@ const Users = () => {
               <Th>
                 <Title> email</Title>
               </Th>
-              <Th>
-                <Title> Tareas</Title>
-              </Th>
+
               <Th>
                 <Title> Status</Title>
               </Th>
             </Tr>
           </Thead>
-          {arrayUsers.map((item) => (
-            <Tbody key={item.id}>
+          {users.map((item) => (
+            <Tbody key={item._id}>
               <Tr>
                 <Td>
                   <Info>
@@ -45,14 +60,12 @@ const Users = () => {
                   </Info>
                 </Td>
                 <Td>
-                  <Info>{item.cellphone}</Info>
+                  <Info>{item.phone}</Info>
                 </Td>
                 <Td>
                   <Info>{item.email}</Info>
                 </Td>
-                <Td>
-                  <Info>{item.tasks}</Info>
-                </Td>
+
                 <Td>
                   <Info>{item.isAdmin.toString()}</Info>
                 </Td>

@@ -13,7 +13,6 @@ import {
 } from "./login.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { login, signUp, errorCleanedLogin } from "../../redux/actions/apiCalls";
-import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { injectStyle } from "react-toastify/dist/inject-style";
 
@@ -44,8 +43,8 @@ const Login = () => {
   };
   const handlesignUp = (e) => {
     e.preventDefault(e);
-
     signUp(dispatch, inputs);
+    window;
   };
   const handleRegister = (e) => {
     e.preventDefault(e);
@@ -103,7 +102,10 @@ const Login = () => {
           </Form>
         </Wrapper>
       )}
-      <ToastContainer />
+      <ToastContainer
+        closeOnClick
+        progressStyle={{ backgroundColor: "#ff7000" }}
+      />
     </Container>
   );
 };
