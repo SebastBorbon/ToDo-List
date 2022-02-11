@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema(
     },
     phone: {
       require: true,
-      type: Number,
+      type: String,
     },
     email: {
       required: true,
@@ -27,11 +27,10 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    img: { type: String },
   },
   { timestamps: true }
 );
 
-const User = mongoose.model("User", UserSchema, "users");
+const User = mongoose.model("User", UserSchema);
 
 module.exports = User;
