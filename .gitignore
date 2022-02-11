@@ -4,3 +4,5 @@ Api/package-lock.json
 Api/node_modules/
 
 Front/package-lock.json
+
+Api/db/
