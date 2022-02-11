@@ -4,6 +4,7 @@ export const Container = styled.div`
   width: 100%;
   height: 10%;
   background-color: #f3f3f3;
+  position: relative;
   @media (max-width: 425px) {
     background-color: #4c4c4c;
     height: 10%;
@@ -67,3 +68,27 @@ export const Image = styled.img`
     object-fit: scale-down;
   }
 `;
+
+export const Button = styled.button`
+width: 60%;
+padding: 6px;
+text-align: center;
+cursor: pointer;
+font-size: 12px;
+margin-left:10px;
+background-color: #ff5000;
+border-radius: 10px;
+border:none;
+color: white;
+&:hover {
+  transition: all 0.3s ease-in-out;
+  background-color: #ff7000;
+  color: white;
+}
+@media (max-width: 425px) {
+  width: 20%;
+  display: flex;
+  transition: all 0.3s ease-in-out;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff7000;`;

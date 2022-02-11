@@ -1,9 +1,4 @@
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import { useDispatch, useSelector } from "react-redux";
-import { arrayTasks, arrayUsers } from "../../dummydata";
 import { isMobile } from "react-device-detect";
 import { useEffect, useState } from "react";
 import {
@@ -42,7 +37,6 @@ if (typeof window !== "undefined") {
 
 const Tasks = () => {
   const user = useSelector((state) => state.currentUser);
-  const [value, setValue] = useState(new Date());
   const [newTask, setnewTask] = useState(true);
   const [allUsers, setAllUsers] = useState([]);
   const [allTasks, setAllTasks] = useState([]);
@@ -56,10 +50,6 @@ const Tasks = () => {
     user: null,
   });
   const dispatch = useDispatch();
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
 
   const createTask = (e, data) => {
     e.preventDefault();

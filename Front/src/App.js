@@ -1,5 +1,6 @@
 import "./App.css";
 import { Route, Routes, Navigate } from "react-router-dom";
+
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 
@@ -8,6 +9,7 @@ function App() {
   return (
     <>
       <Routes>
+        <Route exact path="/" element={<Navigate replate to="home" />}></Route>
         <Route
           path="/login"
           element={token ? <Navigate to="/home" /> : <Login />}
