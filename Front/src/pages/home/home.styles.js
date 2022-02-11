@@ -6,13 +6,20 @@ export const Container = styled.div`
   display: flex;
   @media (max-width: 425px) {
     width: 100%;
-    height: 100vh;
+    height: 100%;
   }
 `;
 
 export const Wrapper = styled.div`
   width 100%;
-  
+  display:flex;
+  flex-direction:column;
+  @media (max-width: 425px) {
+    width: 100%;
+    height: 100vh;
+
+  }
+ 
 `;
 export const ImageContainer = styled.div`
   display: flex;

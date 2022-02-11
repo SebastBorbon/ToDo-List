@@ -6,6 +6,13 @@ export const Container = styled.div`
   margin-left: 10px;
   margin-top: 100px;
   height: 80%;
+  width: 99d%;
+  background-color: white;
+  @media (max-width: 425px) {
+    margin: 0px 0px;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
 `;
 export const ShowTasks = styled.div`
   width: 80%;
@@ -32,16 +39,27 @@ export const ShowTasks = styled.div`
   &::-webkit-scrollbar-track {
     border-radius: 10px;
   }
+  @media (max-width: 425px) {
+    width: 90%;
+    height: 75%;
+    margin: 30px 10px;
+    overflow-x: hidden;
+  }
 `;
 
 export const Wrapper = styled.div`
-  background-color: #f3f3f3;
+  background-color: #eeeeee;
   width: 90%;
-  height: 165px;
   border-radius: 15px;
   margin-bottom: 20px;
   display: flex;
   justify-content: flex-start;
+  @media (max-width: 425px) {
+    height: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    flex-wrap: wrap;
+  }
 `;
 export const TaskTitle = styled.div`
   margin: 15px 30px;
@@ -54,6 +72,10 @@ export const TaskTitle = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   flex-wrap: wrap;
+  @media (max-width: 425px) {
+    font-size: 15px;
+    margin: 5px 0px;
+  }
 `;
 export const TaskText = styled.div`
   display: inline-block
@@ -70,9 +92,19 @@ export const ContainerCheckbox = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 1px;
+  @media (max-width: 425px) {
+    width: 100%;
+    height: 25%;
+  }
 `;
 export const CreateTasks = styled.div`
   width: 30%;
+  @media (max-width: 425px) {
+    width: 100%;
+    height: 80%;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
 `;
 export const CreateContainer = styled.div`
   background-color: #f3f3f3;
@@ -84,6 +116,8 @@ export const CreateContainer = styled.div`
   align-items: start;
   justify-content: flex-start;
   flex-direction: column;
+  @media (max-width: 425px) {
+  }
 `;
 export const CreateTitle = styled.div`
   background-color: #ff5000;
@@ -145,5 +179,33 @@ export const Button = styled.button`
     transition: all 0.3s ease-in-out;
     background-color: #ff5000;
     color: white;
+  }
+`;
+export const ButtonMobile = styled.button`
+  padding: 10px 10px;
+  width: 50%;
+  margin-left: 5%;
+  padding: 10px 10px;
+  border-radius: 20px;
+  border: none;
+  background-color: #ff5000;
+  font-family: Montserrat;
+  cursor: pointer;
+  color: white;
+  display: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 10px;
+  &:hover {
+    transition: all 0.1s ease-in-out;
+    background-color: #ff7000;
+  }
+  @media (max-width: 425px) {
+    display: flex;
+    transition: all 0.3s ease-in-out;
+    align-items: center;
+    justify-content: center;
+    background-color: #ff7000;
   }
 `;
