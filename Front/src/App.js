@@ -8,7 +8,9 @@ function App() {
   return (
     <>
       <Routes>
+        <Route exact path="/" element={<Navigate replate to="home" />}></Route>
         <Route
+          exact
           path="/login"
           element={token ? <Navigate to="/home" /> : <Login />}
         />

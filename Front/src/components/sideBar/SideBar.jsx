@@ -12,6 +12,17 @@ import {
 } from "./sideBar.styles";
 
 const SideBar = ({ setRender }) => {
+  const isAdmin = window.localStorage.getItem("isAdmin");
+
+  const usersView = () => {
+    if (isAdmin == "true") {
+      return (
+        <MenuItem onClick={() => setRender("Users")}>
+          <PeopleAltIcon style={{ color: "white" }} /> <Text>Usuarios</Text>
+        </MenuItem>
+      );
+    }
+  };
   return (
     <Container>
       <ImgContainer>
@@ -21,9 +32,7 @@ const SideBar = ({ setRender }) => {
         <MenuItem onClick={() => setRender("Home")}>
           <HomeIcon style={{ color: "white" }} /> <Text>Inicio</Text>
         </MenuItem>
-        <MenuItem onClick={() => setRender("Users")}>
-          <PeopleAltIcon style={{ color: "white" }} /> <Text>Usuarios</Text>
-        </MenuItem>
+        {usersView()}
         <MenuItem onClick={() => setRender("Tasks")}>
           <FormatListBulletedIcon style={{ color: "white" }} />
           <Text>Tareas</Text>

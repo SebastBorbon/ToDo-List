@@ -1,8 +1,8 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
-const server = require("../server").server;
 const User = require("../models/user");
+const app = require("../server").app;
 
 afterEach(async () => {
   const cleanUpUser = async () => {
@@ -14,7 +14,7 @@ afterEach(async () => {
 describe("Suite de pruebas auth", () => {
   it("should return 401 when no jwt token available", (done) => {
     chai
-      .request(server)
+      .request(app)
       .get("/auth/login")
       .end((err, res) => {
         chai.assert.equal(res.statusCode, 401);
@@ -24,7 +24,7 @@ describe("Suite de pruebas auth", () => {
 
   it("should return 201 and token for succesful login", (done) => {
     chai
-      .request(server)
+      .request(app)
       .post("/auth/login")
       .set("content-type", "application/json")
       .send({ email: "borbonalgo@hotmail.com", password: "TorrensPrueba1," })

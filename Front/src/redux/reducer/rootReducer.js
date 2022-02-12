@@ -30,6 +30,9 @@ const userSlice = createSlice({
     getAllUsers: (state, action) => {
       state.allUsers = action.payload;
     },
+    postTasks: (state, action) => {
+      state.tasks.push(action.payload);
+    },
     getAllTasks: (state, action) => {
       state.tasks = action.payload;
     },
@@ -59,5 +62,6 @@ export const {
   deleteTask,
   setError,
   cleanError,
+  postTasks,
 } = userSlice.actions;
 export default userSlice.reducer;

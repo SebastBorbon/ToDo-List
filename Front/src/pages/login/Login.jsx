@@ -44,7 +44,6 @@ const Login = () => {
   const handlesignUp = (e) => {
     e.preventDefault(e);
     signUp(dispatch, inputs);
-    window;
   };
   const handleRegister = (e) => {
     e.preventDefault(e);
