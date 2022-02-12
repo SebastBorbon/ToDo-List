@@ -25,3 +25,5 @@ app.use("/api/users", usersRoutes);
 app.listen(port, () => {
   console.log("server started at port 3000");
 });
+
+module.exports = { app };
