@@ -14,12 +14,11 @@ Además está alojada en esta instancia de amazon CS2 y a mi dominoio
 
 #Test
 
-para probar los test es necesario cambiar la ruta de la base de datos(pues usa la del contenedor de docker para conectarse con la api)
-la ruta de los test está definida también en el archivo database.js
+Cuenta con test unitarios Http, hechos con mocha, para probar los test es necesario cambiar la ruta de la base de datos(pues usa la del contenedor de docker para conectarse con la api) y lanzarlos en la Api con npm test la ruta de los test está definida también en el archivo database.js
 
 # Proyecto
 
-el proyecto tiene todos los requerimientos tanto necesarios como puntos extra de la prueba de torrens.
+el proyecto tiene todos los requerimientos tanto necesarios como puntos extra de la prueba de torrens. si tienen alguna duda de cómo están implementados tiene tags en todos los puntos
 
 # Código
 
@@ -27,6 +26,7 @@ El código está hecho enteramente por Sebastián Vélez utilizando flujo de ram
 
 #Roles
 
-Tiene roles usuario y administrador, solo el administrador puede asignar tareas a otros usuarios. todas las tareas deben ser aceptadas!
+Tiene roles usuario y administrador, solo el administrador puede asignar tareas a otros usuarios y ver la lista de usuarios y tareas. todas las tareas deben ser aceptadas!
 
 
+si tienen cualquier duda no duden contactarme!
