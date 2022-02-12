@@ -5,8 +5,9 @@ const userSlice = createSlice({
   initialState: {
     currentUser: null,
     tasks: [],
+    allUsers: [],
     isFetching: false,
-    error: false,
+    error: [],
   },
   reducers: {
     loginStart: (state) => {
@@ -18,15 +19,49 @@ const userSlice = createSlice({
     },
     loginFailure: (state) => {
       state.isFetching = false;
-      state.error = true;
     },
     logOut: (state) => {
       state.currentUser = null;
       state.isFetching = false;
     },
+    getTask: (state, action) => {
+      state.tasks = action.payload;
+    },
+    getAllUsers: (state, action) => {
+      state.allUsers = action.payload;
+    },
+    postTasks: (state, action) => {
+      state.tasks.push(action.payload);
+    },
+    getAllTasks: (state, action) => {
+      state.tasks = action.payload;
+    },
+    deleteTask: (state, action) => {
+      state.tasks.splice(
+        state.tasks.findIndex((item) => item._id === action.payload),
+        1
+      );
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+    cleanError: (state) => {
+      state.error = [];
+    },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logOut } =
-  userSlice.actions;
+export const {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  logOut,
+  getTask,
+  getAllUsers,
+  getAllTasks,
+  deleteTask,
+  setError,
+  cleanError,
+  postTasks,
+} = userSlice.actions;
 export default userSlice.reducer;

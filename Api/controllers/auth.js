@@ -1,9 +1,14 @@
-const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const CryptoJS = require("crypto-js");
+const {
+  validationLogin,
+  validationRegister,
+} = require("../middlewares/validationAuth");
 
 const signUp = async (req, res) => {
+  const { error } = validationRegister.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
   const newUser = new User({
     name: req.body.name,
     lastName: req.body.lastName,
@@ -16,29 +21,27 @@ const signUp = async (req, res) => {
   });
   try {
     await newUser.save();
-    res.status(201).json("user created!");
+    res.status(201).json({ message: "user created" });
   } catch (err) {
-    res.status(500).json("failed the signup");
+    res.status(500).json({ message: "user already exists" });
     console.log(err);
   }
 };
 
 const login = async (req, res) => {
   console.log(req.body);
+  const { error } = validationLogin.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+  console.log(error);
   try {
     const user = await User.findOne({ email: req.body.email });
-    console.log(user, "es el user encontrado");
-    if (!user)
-      return (
-        res.status(401).json("Wrong credentials"),
-        console.log("fallo en encontrar user")
-      );
+    if (!user) return res.status(401).json({ message: "Wrong credentials" });
     const hashedPwd = CryptoJS.AES.decrypt(user.password, process.env.SECRET, {
       expiresIn: "1d",
     });
     let ogPassword = hashedPwd.toString(CryptoJS.enc.Utf8);
     if (ogPassword !== req.body.password)
-      return res.status(401).json("Wrong credentials");
+      return res.status(401).json({ message: "Wrong credentials" });
     const token = jwt.sign(
       {
         id: user._id,
@@ -47,10 +50,10 @@ const login = async (req, res) => {
       process.env.JWT_KEY
     );
     const { password, ...others } = user._doc;
-    res.json({ ...others, token });
+    res.status(201).json({ ...others, token });
   } catch (err) {
     console.log(err);
-    res.status(500).json("failed the login");
+    res.status(500).json({ message: "Wrong credentials" });
   }
 };
 

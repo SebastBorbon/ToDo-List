@@ -12,10 +12,6 @@ const TaskSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  status: {
-    type: String,
-    default: "por hacer",
-  },
   endDate: {
     type: String,
     default: "",

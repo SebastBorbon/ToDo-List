@@ -1,15 +1,13 @@
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import { useDispatch, useSelector } from "react-redux";
-import { arrayTasks, arrayUsers } from "../../dummydata";
 import { isMobile } from "react-device-detect";
 import { useEffect, useState } from "react";
 import {
   getAllUsersReq,
   getTaskReq,
   postTask,
+  deletTaskReq,
+  getAllTasksReq,
+  editTask,
 } from "../../redux/actions/apiCalls";
 import {
   Container,
@@ -28,13 +26,22 @@ import {
   Option,
   Button,
   ButtonMobile,
+  BtnBorrar,
 } from "./tasks.styles";
+import { ToastContainer, toast } from "react-toastify";
+import { injectStyle } from "react-toastify/dist/inject-style";
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 const Tasks = () => {
   const user = useSelector((state) => state.currentUser);
-  const [value, setValue] = useState(new Date());
+  const userId = useSelector((state) => state.currentUser.user_id);
   const [newTask, setnewTask] = useState(true);
   const [allUsers, setAllUsers] = useState([]);
+  const [allTasks, setAllTasks] = useState([]);
+
   const [formErrors, setFormErrors] = useState({
     error: "",
   });
@@ -46,16 +53,14 @@ const Tasks = () => {
   });
   const dispatch = useDispatch();
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
   const createTask = (e, data) => {
     e.preventDefault();
     if (data.user) {
-      postTask(data, (response) => {
-        console.log(response);
+      postTask(dispatch, data, (response) => {
+        setAllTasks([...allTasks, response]);
       });
+      toast.dark("Tarea creada!");
+
       setFormErrors({ error: "" });
       setTaskData({
         title: "",
@@ -74,11 +79,29 @@ const Tasks = () => {
       getAllUsersReq(dispatch, (response) => {
         setAllUsers(response);
       });
+      getAllTasksReq(dispatch, (response) => {
+        setAllTasks(response);
+      });
     } else {
+      getTaskReq(dispatch, user._id, (response) => {
+        setAllTasks(response);
+      });
+
       setAllUsers([user]);
     }
   }, []);
-  useEffect(() => {}, [value]);
+
+  const handleDelete = (id) => {
+    deletTaskReq(dispatch, id, () => {
+      setAllTasks(allTasks.filter((elem) => elem._id !== id));
+    });
+    toast.dark("Tarea borrada!");
+  };
+  const handleAccepted = (id) => {
+    editTask(id, (response) => {
+      setAllTasks(response);
+    });
+  };
 
   const renderContent = () => {
     if (isMobile) {
@@ -86,53 +109,39 @@ const Tasks = () => {
         <Container>
           {newTask ? (
             <ShowTasks>
-              {arrayTasks.map((item) => (
-                <Wrapper key={item.id}>
+              {allTasks.map((item) => (
+                <Wrapper key={item._id}>
                   <TaskTitle>
                     Titulo:
-                    <TaskText>{item.title}</TaskText>
+                    <TaskText>{item.title.slice(0, 10)}</TaskText>
                   </TaskTitle>
                   <TaskTitle>
                     Descripcion:
-                    <TaskText>{item.description.slice(0, 50)}</TaskText>
+                    <TaskText>{item.description.slice(0, 30)}</TaskText>
                   </TaskTitle>
                   <TaskTitle>
                     Fecha:
-                    <TaskText>{item.endDate}</TaskText>
+                    <TaskText>{item.endDate.slice(0, 40)}</TaskText>
                   </TaskTitle>
                   <TaskTitle>
                     Usuario:
-                    <TaskText>Sebas</TaskText>
+                    <TaskText>{item.userId?.name}</TaskText>
                   </TaskTitle>
                   <ContainerCheckbox>
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue={item.status}
-                        name="radio-buttons-group"
-                        style={{
-                          color: "#ff5000",
-                          flexDirection: "row",
-                        }}
-                        onChange={handleChange}
+                    {item.accepted ? (
+                      <p>aceptada</p>
+                    ) : (
+                      <BtnBorrar
+                        onClick={() =>
+                          handleAccepted({ id: item._id, userId: item.userId })
+                        }
                       >
-                        <FormControlLabel
-                          value="iniciar"
-                          control={<Radio style={{ color: "#ff5000" }} />}
-                          label="Iniciar"
-                        />
-                        <FormControlLabel
-                          value="en proceso"
-                          control={<Radio style={{ color: "#ff5000" }} />}
-                          label="En proceso"
-                        />
-                        <FormControlLabel
-                          value="finalizada"
-                          control={<Radio style={{ color: "#ff5000" }} />}
-                          label="finalizada"
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                        aceptar
+                      </BtnBorrar>
+                    )}
+                    <BtnBorrar onClick={() => handleDelete(item._id)}>
+                      borrar
+                    </BtnBorrar>
                   </ContainerCheckbox>
                 </Wrapper>
               ))}
@@ -155,7 +164,7 @@ const Tasks = () => {
                     }}
                     name="title"
                     minLength={4}
-                    maxLength={30}
+                    maxLength={10}
                     size={30}
                   ></InputTitle>
                   <Label>Descripcion:</Label>
@@ -167,7 +176,7 @@ const Tasks = () => {
                       setTaskData({ ...taskData, description: e.target.value });
                     }}
                     minLength={4}
-                    maxLength={100}
+                    maxLength={30}
                     size={20}
                   ></Input>
                   <Label>Fecha a finalizar:</Label>
@@ -187,9 +196,7 @@ const Tasks = () => {
                       setTaskData({ ...taskData, user: e.target.value });
                     }}
                   >
-                    <Option disabled selected value>
-                      --select an option--
-                    </Option>
+                    <Option disabled>--select an option--</Option>
                     {allUsers.map((item) => (
                       <Option key={item._id} value={item._id}>
                         {item.name} {item.lastName}
@@ -208,94 +215,125 @@ const Tasks = () => {
           <ButtonMobile onClick={() => setnewTask(true)}>
             Ver Tareas
           </ButtonMobile>
+          <ToastContainer
+            closeOnClick
+            progressStyle={{ backgroundColor: "#ff7000" }}
+          />
         </Container>
       );
     }
     return (
       <Container>
         <ShowTasks>
-          {arrayTasks.map((item) => (
-            <Wrapper key={item.id}>
+          {allTasks.map((item) => (
+            <Wrapper key={item._id}>
               <TaskTitle>
                 Titulo:
-                <TaskText>{item.title}</TaskText>
+                <TaskText>{item.title.slice(0, 10)}</TaskText>
               </TaskTitle>
               <TaskTitle>
                 Descripcion:
-                <TaskText>{item.description.slice(0, 50)}</TaskText>
+                <TaskText>{item.description.slice(0, 20)}</TaskText>
               </TaskTitle>
               <TaskTitle>
                 Fecha:
-                <TaskText>{item.endDate}</TaskText>
+                <TaskText>{item.endDate.slice(0, 20)}</TaskText>
               </TaskTitle>
               <TaskTitle>
                 Usuario:
-                <TaskText>Sebas</TaskText>
+                <TaskText>
+                  {item.userId?.name}
+                  {item.userId?.lastName}
+                </TaskText>
               </TaskTitle>
               <ContainerCheckbox>
-                <FormControl>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue={item.status}
-                    name="radio-buttons-group"
-                    style={{
-                      color: "#ff5000",
-                      flexDirection: "row",
-                    }}
-                    onChange={handleChange}
+                {item.accepted ? (
+                  <p>aceptada</p>
+                ) : (
+                  <BtnBorrar
+                    onClick={() =>
+                      handleAccepted({ id: item._id, userId: item.userId })
+                    }
                   >
-                    <FormControlLabel
-                      value="iniciar"
-                      control={<Radio style={{ color: "#ff5000" }} />}
-                      label="Iniciar"
-                    />
-                    <FormControlLabel
-                      value="en proceso"
-                      control={<Radio style={{ color: "#ff5000" }} />}
-                      label="En proceso"
-                    />
-                    <FormControlLabel
-                      value="finalizada"
-                      control={<Radio style={{ color: "#ff5000" }} />}
-                      label="finalizada"
-                    />
-                  </RadioGroup>
-                </FormControl>
+                    aceptar
+                  </BtnBorrar>
+                )}
+                <BtnBorrar onClick={() => handleDelete(item._id)}>
+                  borrar
+                </BtnBorrar>
               </ContainerCheckbox>
             </Wrapper>
           ))}
         </ShowTasks>
+
         <CreateTasks>
-          <CreateContainer>
-            <CreateTitle>
-              <TaskText>Agregar Nueva Tarea</TaskText>
-            </CreateTitle>
-            <Label>Title:</Label>
-            <InputTitle
-              type="text"
-              minLength={4}
-              maxLength={30}
-              size={30}
-            ></InputTitle>
-            <Label>Description:</Label>
-            <Input type="text" minLength={4} maxLength={100} size={20}></Input>
-            <Label>Fecha a finalizar:</Label>
-            <InputTitle
-              type="date"
-              value={value}
-              onChange={(e) => handleChange(e)}
-            ></InputTitle>
-            <Label>Usuario:</Label>
-            <Select>
-              {arrayUsers.map((item) => (
-                <Option key={item.id}>
-                  {item.name} {item.lastName}
+          <form onSubmit={(e) => createTask(e, taskData)}>
+            <CreateContainer>
+              <CreateTitle>
+                <TaskText>Agregar Nueva Tarea</TaskText>
+              </CreateTitle>
+              <Label>Title:</Label>
+              <InputTitle
+                type="text"
+                required={true}
+                value={taskData.title}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setTaskData({ ...taskData, title: e.target.value });
+                }}
+                name="title"
+                minLength={4}
+                maxLength={10}
+                size={10}
+              ></InputTitle>
+              <Label>Descripcion:</Label>
+              <Input
+                type="text"
+                value={taskData.description}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setTaskData({ ...taskData, description: e.target.value });
+                }}
+                minLength={4}
+                maxLength={100}
+                size={20}
+              ></Input>
+              <Label>Fecha a finalizar:</Label>
+              <InputTitle
+                type="date"
+                required={true}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setTaskData({ ...taskData, date: e.target.value });
+                }}
+              ></InputTitle>
+              <Label>Usuario:</Label>
+              <Select
+                defaultValue={"DEFAULT"}
+                required={true}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setTaskData({ ...taskData, user: e.target.value });
+                }}
+              >
+                <Option value="DEFAULT" disabled>
+                  --select an option--
                 </Option>
-              ))}
-            </Select>
-            <Button onClick={() => setnewTask(true)}>Crear nueva Tarea</Button>
-          </CreateContainer>
+                {allUsers.map((item) => (
+                  <Option key={item._id} value={item._id}>
+                    {item.name} {item.lastName}
+                  </Option>
+                ))}
+              </Select>
+              <Label>{formErrors.error}</Label>
+              <Button type="submit">Crear nueva Tarea</Button>
+            </CreateContainer>
+          </form>
         </CreateTasks>
+        <ToastContainer
+          closeOnClick
+          progressStyle={{ backgroundColor: "#ff7000" }}
+        />
       </Container>
     );
   };

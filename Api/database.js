@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 //I setup the info nedeed to connect with te database on mongo
 const url = `mongodb://admin:admin@mongodb:27017/toDoDB`;
+//para ejecutar la base de datos con npm start
+const urlTest = "mongodb://admin:admin@localhost:27018/toDoDB";
 
 const connectionParams = {
   useNewUrlParser: true,
@@ -9,7 +11,7 @@ const connectionParams = {
 };
 
 mongoose
-  .connect(url, connectionParams)
+  .connect(urlTest, connectionParams)
   .then(() => {
     console.log("Connected to database ");
   })
