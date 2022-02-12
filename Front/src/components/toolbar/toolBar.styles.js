@@ -46,7 +46,7 @@ export const Tasks = styled.p`
 export const Text = styled.p`
   font-weight: 600;
   @media (max-width: 425px) {
-    font-size: 13px;
+    display: none;
   }
 `;
 

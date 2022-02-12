@@ -9,6 +9,7 @@ import {
   setError,
   cleanError,
   loginFailure,
+  postTasks,
 } from "../reducer/rootReducer";
 
 const baseUrl = "http://localhost:3000/api/";
@@ -18,6 +19,7 @@ export const login = async (dispatch, user) => {
   try {
     const res = await axios.post(`${baseUrl}auth/login`, user);
     window.localStorage.setItem("token", res.data.token);
+    window.localStorage.setItem("isAdmin", res.data.isAdmin);
     dispatch(loginSuccess(res.data));
     window.location.reload();
   } catch (err) {
@@ -29,7 +31,6 @@ export const login = async (dispatch, user) => {
 export const signUp = async (dispatch, user) => {
   try {
     const res = await axios.post(`${baseUrl}auth/signup`, user);
-    console.log(res.data);
     if (res.data.message === "user created") {
       login(dispatch, {
         email: user.email,
@@ -73,9 +74,10 @@ export const getAllTasksReq = async (dispatch, cb) => {
   }
 };
 
-export const postTask = async (payload, cb) => {
+export const postTask = async (dispatch, payload, cb) => {
   try {
     const res = await axios.post(`${baseUrl}tasks`, payload);
+    dispatch(postTasks(res.data));
     cb(res.data);
   } catch (e) {
     console.log(e);
@@ -83,7 +85,7 @@ export const postTask = async (payload, cb) => {
 };
 export const editTask = async (payload, cb) => {
   try {
-    const res = await axios.put(`${baseUrl}tasks?id=${payload}`);
+    const res = await axios.put(`${baseUrl}tasks`, payload);
     cb(res.data);
   } catch (e) {
     console.log(e);

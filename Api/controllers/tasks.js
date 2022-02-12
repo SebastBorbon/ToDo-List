@@ -46,15 +46,19 @@ const deleteTasks = async (req, res) => {
 };
 
 const updateTasks = async (req, res) => {
+  console.log(req.body, " este es el body rey");
   try {
-    const updatedTask = await Task.findByIdAndUpdate(
-      req.query.id,
+    await Task.findByIdAndUpdate(
+      req.body.id,
       {
         accepted: true,
       },
       { new: true }
     );
-    res.json(updatedTask);
+    const allTasks = await Task.find({ userId: req.body.userId }).populate(
+      "userId"
+    );
+    res.json(allTasks);
   } catch (err) {
     res.status(500).json({ message: "Failed Update" });
   }

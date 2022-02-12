@@ -37,9 +37,11 @@ if (typeof window !== "undefined") {
 
 const Tasks = () => {
   const user = useSelector((state) => state.currentUser);
+  const userId = useSelector((state) => state.currentUser.user_id);
   const [newTask, setnewTask] = useState(true);
   const [allUsers, setAllUsers] = useState([]);
   const [allTasks, setAllTasks] = useState([]);
+
   const [formErrors, setFormErrors] = useState({
     error: "",
   });
@@ -54,7 +56,7 @@ const Tasks = () => {
   const createTask = (e, data) => {
     e.preventDefault();
     if (data.user) {
-      postTask(data, (response) => {
+      postTask(dispatch, data, (response) => {
         setAllTasks([...allTasks, response]);
       });
       toast.dark("Tarea creada!");
@@ -97,12 +99,10 @@ const Tasks = () => {
   };
   const handleAccepted = (id) => {
     editTask(id, (response) => {
-      copyTask = allTasks;
-      const index = allTasks.findIndex((el) => el._id == response);
-      copyTask[index] = { ...copyTask[index], accepted: true };
-      setAllTasks(copyTask);
+      setAllTasks(response);
     });
   };
+
   const renderContent = () => {
     if (isMobile) {
       return (
@@ -128,9 +128,17 @@ const Tasks = () => {
                     <TaskText>{item.userId?.name}</TaskText>
                   </TaskTitle>
                   <ContainerCheckbox>
-                    <BtnBorrar onClick={() => handleAccepted(item._id)}>
-                      aceptar
-                    </BtnBorrar>
+                    {item.accepted ? (
+                      <p>aceptada</p>
+                    ) : (
+                      <BtnBorrar
+                        onClick={() =>
+                          handleAccepted({ id: item._id, userId: item.userId })
+                        }
+                      >
+                        aceptar
+                      </BtnBorrar>
+                    )}
                     <BtnBorrar onClick={() => handleDelete(item._id)}>
                       borrar
                     </BtnBorrar>
@@ -188,9 +196,7 @@ const Tasks = () => {
                       setTaskData({ ...taskData, user: e.target.value });
                     }}
                   >
-                    <Option disabled selected value>
-                      --select an option--
-                    </Option>
+                    <Option disabled>--select an option--</Option>
                     {allUsers.map((item) => (
                       <Option key={item._id} value={item._id}>
                         {item.name} {item.lastName}
@@ -241,9 +247,17 @@ const Tasks = () => {
                 </TaskText>
               </TaskTitle>
               <ContainerCheckbox>
-                <BtnBorrar onClick={() => handleAccepted(item._id)}>
-                  aceptar
-                </BtnBorrar>
+                {item.accepted ? (
+                  <p>aceptada</p>
+                ) : (
+                  <BtnBorrar
+                    onClick={() =>
+                      handleAccepted({ id: item._id, userId: item.userId })
+                    }
+                  >
+                    aceptar
+                  </BtnBorrar>
+                )}
                 <BtnBorrar onClick={() => handleDelete(item._id)}>
                   borrar
                 </BtnBorrar>
@@ -295,13 +309,14 @@ const Tasks = () => {
               ></InputTitle>
               <Label>Usuario:</Label>
               <Select
+                defaultValue={"DEFAULT"}
                 required={true}
                 onChange={(e) => {
                   e.preventDefault();
                   setTaskData({ ...taskData, user: e.target.value });
                 }}
               >
-                <Option disabled selected value>
+                <Option value="DEFAULT" disabled>
                   --select an option--
                 </Option>
                 {allUsers.map((item) => (

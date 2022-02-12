@@ -11,13 +11,21 @@ import {
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import logo from "../../images/logoTorrens.png";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 const ToolBar = () => {
   const taskNumber = useSelector((state) => state.tasks.length);
-  const handleClick = () => {
+  const [numberTasks, setNumberTasks] = useState("");
+  useEffect(() => {
+    if (numberTasks !== taskNumber) setNumberTasks(taskNumber);
+  }, [taskNumber]);
+
+  const handleSignOut = () => {
     window.localStorage.removeItem("token");
+    window.localStorage.removeItem("isAdmin");
     window.location.reload();
   };
+
   return (
     <Container>
       <Wrapper>
@@ -26,9 +34,9 @@ const ToolBar = () => {
         </ImageContainer>
         <TextContainer>
           <NotificationsIcon />
-          <Tasks>Tareas({taskNumber})</Tasks>
+          <Tasks>Tareas({numberTasks})</Tasks>
           <Text>Sebastian</Text>
-          <Button onClick={handleClick}>Logout</Button>
+          <Button onClick={handleSignOut}>Logout</Button>
         </TextContainer>
       </Wrapper>
     </Container>

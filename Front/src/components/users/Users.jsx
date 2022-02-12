@@ -20,7 +20,7 @@ const Users = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (user.isAdmin === false) {
+    if (user.isAdmin === true) {
       getAllUsersReq(dispatch, (response) => {
         const sortUsers = response.slice().sort((a, b) => {
           return a.name.localeCompare(b.name);
