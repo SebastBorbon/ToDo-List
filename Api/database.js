@@ -11,7 +11,7 @@ const connectionParams = {
 };
 
 mongoose
-  .connect(urlTest, connectionParams)
+  .connect(url, connectionParams)
   .then(() => {
     console.log("Connected to database ");
   })
