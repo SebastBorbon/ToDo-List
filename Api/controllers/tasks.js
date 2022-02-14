@@ -46,7 +46,6 @@ const deleteTasks = async (req, res) => {
 };
 
 const updateTasks = async (req, res) => {
-  console.log(req.body, " este es el body rey");
   try {
     await Task.findByIdAndUpdate(
       req.body.id,

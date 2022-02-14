@@ -29,7 +29,6 @@ const signUp = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  console.log(req.body);
   const { error } = validationLogin.validate(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
   console.log(error);

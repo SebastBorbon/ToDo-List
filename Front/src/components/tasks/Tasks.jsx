@@ -105,7 +105,6 @@ const Tasks = () => {
     toast.dark("Tarea borrada!");
   };
   const handleAccepted = (id) => {
-    console.log(id.userId);
     if (userId === id.userId || userId === id.userId._id) {
       editTask(id, (response) => {
         setAllTasks(response);
