@@ -72,6 +72,7 @@ const Login = () => {
             <Input
               placeholder="Contraseña"
               name="password"
+              type="password"
               onChange={handleChange}
             />
             <Button onClick={handlesignUp}>Registrarse</Button>
@@ -94,6 +95,7 @@ const Login = () => {
             <InputLogin
               placeholder="Contraseña"
               name="password"
+              type="password"
               onChange={handleChange}
             />
             <Button onClick={handleLogin}>Iniciar Sesión</Button>

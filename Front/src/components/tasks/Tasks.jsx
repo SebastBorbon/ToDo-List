@@ -37,7 +37,9 @@ if (typeof window !== "undefined") {
 
 const Tasks = () => {
   const user = useSelector((state) => state.currentUser);
-  const userId = useSelector((state) => state.currentUser.user_id);
+  const userId = JSON.parse(
+    JSON.parse(localStorage.getItem("persist:root")).currentUser
+  )._id;
   const [newTask, setnewTask] = useState(true);
   const [allUsers, setAllUsers] = useState([]);
   const [allTasks, setAllTasks] = useState([]);
@@ -49,24 +51,29 @@ const Tasks = () => {
     title: "",
     description: "",
     date: null,
-    user: null,
+    user: "DEFAULT",
   });
   const dispatch = useDispatch();
 
   const createTask = (e, data) => {
     e.preventDefault();
-    if (data.user) {
-      postTask(dispatch, data, (response) => {
-        setAllTasks([...allTasks, response]);
-      });
+    let prevUser = taskData.user;
+    let prevDate = taskData.date;
+    if (prevUser && prevUser !== "DEFAULT") {
+      postTask(
+        dispatch,
+        { ...data, user: prevUser, date: prevDate },
+        (response) => {
+          setAllTasks([...allTasks, response]);
+        }
+      );
       toast.dark("Tarea creada!");
 
       setFormErrors({ error: "" });
       setTaskData({
+        ...taskData,
         title: "",
         description: "",
-        date: null,
-        user: null,
       });
     } else {
       setFormErrors({ ...formErrors, error: "Selecciona un usuario" });
@@ -98,9 +105,14 @@ const Tasks = () => {
     toast.dark("Tarea borrada!");
   };
   const handleAccepted = (id) => {
-    editTask(id, (response) => {
-      setAllTasks(response);
-    });
+    console.log(id.userId);
+    if (userId === id.userId || userId === id.userId._id) {
+      editTask(id, (response) => {
+        setAllTasks(response);
+      });
+    } else {
+      toast.dark("Esta tarea no es tuya!");
+    }
   };
 
   const renderContent = () => {
@@ -190,7 +202,6 @@ const Tasks = () => {
                   ></InputTitle>
                   <Label>Usuario:</Label>
                   <Select
-                    required={true}
                     onChange={(e) => {
                       e.preventDefault();
                       setTaskData({ ...taskData, user: e.target.value });
@@ -237,7 +248,7 @@ const Tasks = () => {
               </TaskTitle>
               <TaskTitle>
                 Fecha:
-                <TaskText>{item.endDate.slice(0, 20)}</TaskText>
+                <TaskText>{item.endDate?.slice(0, 20)}</TaskText>
               </TaskTitle>
               <TaskTitle>
                 Usuario:
@@ -309,11 +320,13 @@ const Tasks = () => {
               ></InputTitle>
               <Label>Usuario:</Label>
               <Select
-                defaultValue={"DEFAULT"}
-                required={true}
+                value={taskData.user}
                 onChange={(e) => {
                   e.preventDefault();
-                  setTaskData({ ...taskData, user: e.target.value });
+                  setTaskData({
+                    ...taskData,
+                    user: e.target.value,
+                  });
                 }}
               >
                 <Option value="DEFAULT" disabled>

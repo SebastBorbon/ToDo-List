@@ -15,6 +15,9 @@ import { useEffect, useState } from "react";
 
 const ToolBar = () => {
   const taskNumber = useSelector((state) => state.tasks.length);
+  const user = JSON.parse(
+    JSON.parse(localStorage.getItem("persist:root")).currentUser
+  ).name;
   const [numberTasks, setNumberTasks] = useState("");
   useEffect(() => {
     if (numberTasks !== taskNumber) setNumberTasks(taskNumber);
@@ -35,7 +38,7 @@ const ToolBar = () => {
         <TextContainer>
           <NotificationsIcon />
           <Tasks>Tareas({numberTasks})</Tasks>
-          <Text>Sebastian</Text>
+          <Text>{user}</Text>
           <Button onClick={handleSignOut}>Logout</Button>
         </TextContainer>
       </Wrapper>
